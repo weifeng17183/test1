@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eliteams.quick4j.dao.permissionMapper">
+  <resultMap id="BaseResultMap" type="com.eliteams.quick4j.bean.permission">
+    <id column="permission_id" jdbcType="BIGINT" property="permissionId" />
+    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+    <result column="permission_sign" jdbcType="VARCHAR" property="permissionSign" />
+    <result column="permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    permission_id, permission_name, permission_sign, permission_desc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from permission
+    where permission_id = #{permissionId,jdbcType=BIGINT}
+  </select>
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    SELECT p.permission_id, p.permission_name, p.permission_sign, p.permission_desc FROM permission p 
+    LEFT JOIN role_permission rp ON p.permission_id = rp.permission_id
+	LEFT JOIN role r ON r.role_id = rp.role_id  LEFT JOIN user_role ur ON r.role_id = ur.role_id
+	LEFT JOIN USER u ON u.user_id = ur.user_id WHERE u.user_id =#{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from permission
+    where permission_id = #{permissionId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.eliteams.quick4j.bean.permission">
+    insert into permission (permission_id, permission_name, permission_sign, 
+      permission_desc)
+    values (#{permissionId,jdbcType=BIGINT}, #{permissionName,jdbcType=VARCHAR}, #{permissionSign,jdbcType=VARCHAR}, 
+      #{permissionDesc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.eliteams.quick4j.bean.permission">
+    insert into permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="permissionId != null">
+        permission_id,
+      </if>
+      <if test="permissionName != null">
+        permission_name,
+      </if>
+      <if test="permissionSign != null">
+        permission_sign,
+      </if>
+      <if test="permissionDesc != null">
+        permission_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="permissionId != null">
+        #{permissionId,jdbcType=BIGINT},
+      </if>
+      <if test="permissionName != null">
+        #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionSign != null">
+        #{permissionSign,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionDesc != null">
+        #{permissionDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.eliteams.quick4j.bean.permission">
+    update permission
+    <set>
+      <if test="permissionName != null">
+        permission_name = #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionSign != null">
+        permission_sign = #{permissionSign,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionDesc != null">
+        permission_desc = #{permissionDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where permission_id = #{permissionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.eliteams.quick4j.bean.permission">
+    update permission
+    set permission_name = #{permissionName,jdbcType=VARCHAR},
+      permission_sign = #{permissionSign,jdbcType=VARCHAR},
+      permission_desc = #{permissionDesc,jdbcType=VARCHAR}
+    where permission_id = #{permissionId,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.eliteams.quick4j.bean.permission">
+    <id column="permission_id" jdbcType="BIGINT" property="permissionId" />
+    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+    <result column="permission_sign" jdbcType="VARCHAR" property="permissionSign" />
+    <result column="permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
+  </resultMap>
+</mapper>
